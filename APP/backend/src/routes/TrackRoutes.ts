@@ -5,18 +5,23 @@
  * Maps HTTP methods and paths to controller functions for Track resource.
  * Used by app.ts to mount Track API under /api/v1.
  */
+import express from "express";
+import {
+  createTrack,
+  deleteTrack,
+  findTrackById,
+  findTrackBySlug,
+  findTracks,
+  updateTrack,
+} from "../controller/TrackController";
 
-import express from 'express';
-import { createTrack } from '../controller/TrackController';
+const trackRouter = express.Router();
 
-const trackerRouter = express.Router(); // Creates a new router for Track
+trackRouter.post("/tracks", createTrack);
+trackRouter.get("/tracks", findTracks);
+trackRouter.get("/tracks/:id", findTrackById);
+trackRouter.get("/tracks/slug/:id", findTrackBySlug);
+trackRouter.put("/tracks/:id", updateTrack);
+trackRouter.delete("/tracks/:id", deleteTrack);
 
-// Debug GET route for testing connectivity
-trackerRouter.get("/tracks", (req, res) => {
-	res.status(200).json({ message: "GET /tracks route is working" });
-});
-
-// POST route to create a new Track
-trackerRouter.post("/tracks", createTrack);
-
-export default trackerRouter; // Exports the router for use in app.ts
+export default trackRouter;

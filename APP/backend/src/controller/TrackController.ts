@@ -5,20 +5,88 @@
  * Validates and extracts request data, calls service methods, and returns responses.
  * Implements the main controller logic for Track API endpoints.
  */
-
 import { TrackService } from "../service/TrackService";
 import { Request, Response } from "express";
-
 const trackService = new TrackService();
 
 export const createTrack = async (request: Request, response: Response) => {
   try {
-    // Calls the service to create a new Track using request body data
     const track = await trackService.create(request.body);
-    // Responds with the created Track object
-    response.status(200).json({ track: track });
+    response.status(200).json(track);
   } catch (error) {
-    // Handles errors and sends error response
+    response.status(500).json({ error: error });
+  }
+};
+
+export const findTracks = async (_request: Request, response: Response) => {
+  try {
+    const tracks = await trackService.findAll();
+    response.status(200).json(tracks);
+  } catch (error) {
+    response.status(500).json({ error: error });
+  }
+};
+
+export const findTrackById = async (request: Request, response: Response) => {
+  const id = request.params.id;
+  try {
+    const track = await trackService.findById(id!);
+    if (track === null) {
+      response.status(404).json({
+        message: `Track is not found with the given id ${id}`,
+      });
+      return;
+    }
+    response.status(200).json(track);
+  } catch (error) {
+    response.status(500).json({ error: error });
+  }
+};
+
+export const updateTrack = async (request: Request, response: Response) => {
+  const id = request.params.id;
+  try {
+    const track = await trackService.update(id!, request.body);
+    if (track === null) {
+      response.status(404).json({
+        message: `Track is not found with the given id ${id}`,
+      });
+      return;
+    }
+    response.status(200).json(track);
+  } catch (error) {
+    response.status(500).json({ error: error });
+  }
+};
+
+export const findTrackBySlug = async (request: Request, response: Response) => {
+  const slug = request.params.id;
+  try {
+    const track = await trackService.findBySlug(slug!);
+    if (track === null) {
+      response.status(404).json({
+        message: `Track is not found with the given slug ${slug}`,
+      });
+      return;
+    }
+    response.status(200).json(track);
+  } catch (error) {
+    response.status(500).json({ error: error });
+  }
+};
+
+export const deleteTrack = async (request: Request, response: Response) => {
+  const id = request.params.id;
+  try {
+    const isDeleted = await trackService.delete(id!);
+    if (isDeleted === false) {
+      response.status(404).json({
+        message: `Track is not found with the given id ${id}`,
+      });
+      return;
+    }
+    response.status(200).json({ message: "Deleted Successfully" });
+  } catch (error) {
     response.status(500).json({ error: error });
   }
 };

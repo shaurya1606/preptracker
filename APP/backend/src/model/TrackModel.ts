@@ -6,28 +6,39 @@
  * Used by TypeORM for ORM operations and table creation.
  */
 
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+} from "typeorm";
 
-@Entity() // Marks this class as a database entity
+@Entity({ name: "tracks" })
 export class Track {
-  @PrimaryGeneratedColumn("uuid") // Auto-generates a UUID for each Track
-  id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-  @Column({type: 'varchar'}) // Track name
-  name!: string;
-
-  @Column({type: 'varchar'}) // Track description
-  description!: string;
-
-  @Column({type: 'varchar'}) // Track slug (URL-friendly identifier)
+  @Index({ unique: true })
+  @Column({ type: "varchar", length: 255 })
   slug!: string;
 
-  @Column() // Indicates if the track is new
-  isNew?: boolean
+  @Column({ type: "varchar", length: 255 })
+  name!: string;
 
-  @Column() // Indicates if the track is active
-  isActive?: boolean
+  @Column({ type: "text" })
+  description!: string;
 
-  @CreateDateColumn() // Timestamp for when the track was created
+  @Column({ type: "boolean", default: true })
+  isActive!: boolean;
+
+  @Column({ type: "boolean", nullable: true })
+  isNew?: boolean;
+
+  @CreateDateColumn()
   createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }
