@@ -1,4 +1,3 @@
-import { sign } from "crypto";
 import { User } from "../model/UserModel";
 import { UserService } from "./UserService";
 import bcrypt from "bcrypt";
