@@ -22,8 +22,8 @@ export const signUp = async (request: Request, response: Response) => {
 };
 
 export const signIn = async (request: Request, response: Response) => {
-  const user = await authService.signIn(request.body);
-  if (user == null) {
+  const token = await authService.signIn(request.body);
+  if (token == null) {
     response
       .status(400)
       .json({ message: "Please check your email or password." });
@@ -32,5 +32,5 @@ export const signIn = async (request: Request, response: Response) => {
 
   response
     .status(201)
-    .json({ message: "User is logged in successfully.", user });
+    .json({ message: "User is logged in successfully.", token });
 };

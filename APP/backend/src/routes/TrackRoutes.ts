@@ -14,6 +14,7 @@ import {
   findTracks,
   updateTrack,
 } from "../controller/TrackController";
+import { verifyToken } from "../middleware/AuthMiddleware";
 
 const trackRouter = express.Router();
 
