@@ -19,6 +19,7 @@ import { verifyToken } from "../middleware/AuthMiddleware";
 const trackRouter = express.Router();
 
 trackRouter.post("/tracks", createTrack);
+// add verifyToken when it is ready with try and catch
 trackRouter.get("/tracks", findTracks);
 trackRouter.get("/tracks/:id", findTrackById);
 trackRouter.get("/tracks/slug/:id", findTrackBySlug);
